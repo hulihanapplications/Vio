@@ -1,0 +1,13 @@
+!https://github.com/hulihanapplications/Vio/raw/master/screenshot.png(Opal Theme - Vio)!
+
+h1. Opal Theme - Vio
+
+A cool, aqueous theme for "Opal":http://www.hulihanapplications.com/projects/opal.
+
+h2. Install 
+
+# Download the .zip file for this theme.
+# In Opal, Go to Administration > Configure > Themes > Install Theme
+# Select .zip file on your computer and click 'Install'. 
+# Pat yourself on the back. Good Job. 
+ 
