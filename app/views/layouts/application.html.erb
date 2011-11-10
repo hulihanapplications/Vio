@@ -1,37 +1,37 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<%= render :partial => "shared/head" %>
+	<%= render :partial => "head" %>
 </head>
 
 <body>
 <div id="wrapper">
-	<%= render :partial => "browse/top_bar" %>		
+	<%= render :partial => "top_bar" %>		
 	<div id="header">
-		<%= render :partial => "/browse/banner_top" %>		 		 			    	
+		<%= render :partial => "banner_top" %>		 		 			    	
 		<%#= render :partial => "shared/header" %>
 		<%= show_page Page.get_system_page("Website Top") %>
 	      	<div class="main_logo">
-	      		<% if File.exists?(RAILS_ROOT + "/public/themes/#{@setting[:theme]}/images/logo.png") %>
+	      		<% if File.exists?(Rails.root.to_s + "/public/themes/#{@setting[:theme]}/images/logo.png") %>
 		      		<%= link_to raw("<img src=\"/themes/#{@setting[:theme]}/images/logo.png\" border=0 alt=\"#{@setting[:title]}\" title=\"#{@setting[:title]}\">"), {:action => "index", :controller => "browse"} %>
 				<% else %>
 		      		<div class="title"><h1><%= link_to @setting[:title], {:action => "index", :controller => "browse"} %></h1></div>
 					<div class="description"><%= @setting[:description] %> </div>					
 				<% end %>
 	      	</div>
-		<%= render :partial => "browse/main_menu" %>
+		<%= render :partial => "main_menu" %>
 	</div>
 	<div id="content">
-		 <%= render :partial => "shared/flash", :locals => {:flash => flash} %>
-		 <%= render :partial => "/user/menu" if @show_user_menu %>
-		 <%= render :partial => "/admin/menu" if @show_admin_menu %>		 
+		 <%= render :partial => "flash", :locals => {:flash => flash} %>
+		 <%= render :partial => "user/menu" if @show_user_menu %>
+		 <%= render :partial => "admin/menu" if @show_admin_menu %>		 
 	     <%= yield %>			
  		 <% if @show_user_menu || @show_admin_menu %>
 		  <%# Close Tab Div in Menu Partial %>
 		  	</div>
 		  </div>
 		 <% end %>
- 		 <%= render :partial => "/browse/banner_bottom" %>
+ 		 <%= render :partial => "banner_bottom" %>
 		<div style="clear:both"></div><!-- Break Floats -->
 	</div>
 	<div id="footer">

@@ -24,6 +24,7 @@ img.avatar_normal{border:0px solid #666}
 img.avatar_small{width:50px;height:50px;border:0px solid #666}
 img.avatar_tiny, img.pinky{width:20px;height:20px;border:0px solid #666;vertical-align:middle;}
 img.loading{margin:2px;background:#000;padding:10px;border:1px solid #444;;-moz-border-radius: 5px;-webkit-border-radius: 5px}
+img.pinky, img.tiny{border:1px solid #333;height:20px;width:20px;vertical-align:middle} 
 
 /* Main HTML Tags */
 body{background:url(../images/bgs/body.png) repeat-x #0F0F0F;font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;;margin:0px;font-size:12px;color:#ccc}
