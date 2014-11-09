@@ -21,29 +21,9 @@
 
 <div align=left id="page_summarized">	
 	<div style="margin-bottom:10px;" id="top">		
-				<% if Plugin.plugins[:image].is_enabled? %>
-					<% images = PluginImage.find(:all, :conditions => ["item_id = ? and is_approved = '1'", item.id], :order => "created_at ASC") %>
-					<div id="images">
-						<div id="main_image">
-							<%= item_thumbnail(item, :preview => true) %>
-							<%#= item.main_image.to_html %>
-						</div>												
-						<div class="images">
-							<% if item.is_editable_for_user?(@logged_in_user) %>
-								<span >
-									<%= link_to_function icon("new") + " " + t("label.item_new", :item => PluginImage.model_name.human), "new_image()"  %>
-								</span>	
-							<% end %>
-							<% if images.size > 1 %>
-							    <%= icon("spacer") if item.is_editable_for_user?(@logged_in_user) %>
-								<span>
-									<%= link_to_function icon("image") + " " + t("label.items_more", :items => PluginImage.model_name.human(:count => :other)), "select_tab(\"#{Plugin.plugins[:image].model_name.human(:count => :other)}\")"  %>
-								</span>
-							<% end %>																				
-						</div>
-					</div>				
-				<% end %>							
-
+        <div id="preview">
+          <%= preview(item) %>
+        </div>                                                                                                                                                                               
 				<div id="details">
 					<div class="name">
 						<%= item.name %>		
@@ -55,10 +35,10 @@
 						<% if Plugin.plugins[:feature].is_enabled? %>
 							<% 
 								features = PluginFeature.find(:all, :order => "order_number ASC") 
-								if item.is_editable_for_user?(@logged_in_user)
-									feature_values = PluginFeatureValue.find(:all, :conditions => ["item_id = ?", item.id]) # show all values  
+								if item.can?(@logged_in_user, :edit)
+									feature_values = PluginFeatureValue.record(item).all # show all values
 								else 
-									feature_values = PluginFeatureValue.find(:all, :conditions => ["item_id = ? and is_approved = '1'", item.id]) # show only approved values
+									feature_values = PluginFeatureValue.record(item).approved.all # show only approved values
 								end  
 							%> 		
 							<div class="box_2a spacer_vert_left">
@@ -79,7 +59,7 @@
 						<% @setting[:score_min] = Plugin.plugins[:review].get_setting("score_min") %>
 						<% @setting[:score_max] = Plugin.plugins[:review].get_setting("score_max") %>
 
-							<% review_score = PluginReview.average(:review_score, :conditions => ["item_id = ?", item.id]) %>
+							<% review_score = PluginReview.record(item).average(:review_score) %>
 							<% review_score ||= 0 %>										
 							<span>	
 								<%= link_to_function score(:type => @setting[:review_type], :min => @setting[:score_min].to_i, :max => @setting[:score_max].to_i, :value => review_score),  "select_tab(\"#{Plugin.plugins[:review].model_name.human(:count => :other)}\")"  %>																			
@@ -101,16 +81,16 @@
 				<td>
 					<ul class="plugin_tabs_horizontal">
 						<%  for plugin in plugins  %>
-							<% if (@logged_in_user.group.plugin_permissions[plugin.plugin_class.name].can_read? || item.is_user_owner?(@logged_in_user) || @logged_in_user.is_admin?) && (plugin.name != "Feature" && plugin.name != "Tag") %>
+							<% if plugin.plugin_class.can?(@logged_in_user, :view) && (plugin.name != "Feature" && plugin.name != "Tag") %>
 						    	<li><a href="#<%= plugin.model_name.human(:count => :other) %>"><%= plugin.model_name.human(:count => :other) %></a></li>
 							<% end %> 
 						<% end %>	
 					</ul>			
 					<div class="plugin_panes_horizontal"> 					
 						<% for plugin in plugins %>
-							<% if (@logged_in_user.group.plugin_permissions[plugin.plugin_class.name].can_read? || item.is_user_owner?(@logged_in_user) || @logged_in_user.is_admin?) && (plugin.name != "Feature" && plugin.name != "Tag") %>
+							<% if plugin.plugin_class.can?(@logged_in_user, :view) && (plugin.name != "Feature" && plugin.name != "Tag") %>
 							    <div>	
-									<%= render :partial => plugin.partial_path(:type => "view"), :locals => {:plugin => plugin, :item => item, :my_group_plugin_permissions => my_group_plugin_permissions } %>
+									<%= render :partial => plugin.partial_path(:type => "view"), :locals => {:plugin => plugin, :item => item } %>
 								</div> 
 							<% end %>
 						<% end %>						
